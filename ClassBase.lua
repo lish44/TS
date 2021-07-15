@@ -24,7 +24,11 @@ printf("The value = %d", 100)
 ~~~
 @param string fmt 输出格式
 @param [mixed ...] 更多参数
-]] function printf(fmt, ...) print(string.format(tostring(fmt), ...)) end
+]] function printf(
+    fmt,
+    ...)
+    print(string.format(tostring(fmt), ...))
+end
 
 --[[--
 检查并尝试转换为数值，如果无法转换则返回 0
@@ -32,21 +36,27 @@ printf("The value = %d", 100)
 @param [integer base] 进制，默认为十进制
 @return number
 ]]
-function checknumber(value, base) return tonumber(value, base) or 0 end
+function checknumber(value, base)
+    return tonumber(value, base) or 0
+end
 
 --[[--
 检查并尝试转换为整数，如果无法转换则返回 0
 @param mixed value 要检查的值
 @return integer
 ]]
-function checkint(value) return math.round(checknumber(value)) end
+function checkint(value)
+    return math.round(checknumber(value))
+end
 
 --[[--
 检查并尝试转换为布尔值，除了 nil 和 false，其他任何值都会返回 true
 @param mixed value 要检查的值
 @return boolean
 ]]
-function checkbool(value) return (value ~= nil and value ~= false) end
+function checkbool(value)
+    return (value ~= nil and value ~= false)
+end
 
 --[[--
 检查值是否是一个表格，如果不是则返回一个空表格
@@ -54,7 +64,9 @@ function checkbool(value) return (value ~= nil and value ~= false) end
 @return table
 ]]
 function checktable(value)
-    if type(value) ~= "table" then value = {} end
+    if type(value) ~= "table" then
+        value = {}
+    end
     return value
 end
 
@@ -202,12 +214,15 @@ function class(classname, super)
 
         if superType == "table" then
             -- copy fields from super
-            for k, v in pairs(super) do cls[k] = v end
+            for k, v in pairs(super) do
+                cls[k] = v
+            end
             cls.__create = super.__create
             cls.super = super
         else
             cls.__create = super
-            cls.ctor = function() end
+            cls.ctor = function()
+            end
         end
 
         cls.__cname = classname
@@ -216,12 +231,13 @@ function class(classname, super)
         function cls.new(...)
             local instance = cls.__create(...)
             -- copy fields from class to native object
-            for k, v in pairs(cls) do instance[k] = v end
+            for k, v in pairs(cls) do
+                instance[k] = v
+            end
             instance.class = cls
             instance:ctor(...)
             return instance
         end
-
     else
         -- inherited from Lua Object
         if super then
@@ -229,7 +245,10 @@ function class(classname, super)
             setmetatable(cls, {__index = super})
             cls.super = super
         else
-            cls = {ctor = function() end}
+            cls = {
+                ctor = function()
+                end
+            }
         end
 
         cls.__cname = classname
@@ -248,7 +267,9 @@ function class(classname, super)
 end
 
 -- 提供假名以避免和 moonscript 发生冲突
-function quick_class(classname, super) return class(classname, super) end
+function quick_class(classname, super)
+    return class(classname, super)
+end
 
 --[[--
 如果对象是指定类或其子类的实例，返回 true，否则返回 false
@@ -271,7 +292,9 @@ function iskindof(obj, classname)
     end
 
     while mt do
-        if mt.__cname == classname then return true end
+        if mt.__cname == classname then
+            return true
+        end
         mt = mt.super
     end
 
@@ -331,8 +354,7 @@ function import(moduleName, currentModuleName)
         if string.byte(moduleName, offset) ~= 46 then -- .
             moduleFullName = string.sub(moduleName, offset)
             if currentModuleNameParts and #currentModuleNameParts > 0 then
-                moduleFullName = table.concat(currentModuleNameParts, ".") ..
-                                     "." .. moduleFullName
+                moduleFullName = table.concat(currentModuleNameParts, ".") .. "." .. moduleFullName
             end
             break
         end
@@ -382,13 +404,22 @@ end
 @param function method 对象方法
 @return function
 ]]
-function handler(obj, method) return function(...) return method(obj, ...) end end
+function handler(obj, method)
+    return function(...)
+        return method(obj, ...)
+    end
+end
 
 --[[--
 根据系统时间初始化随机数种子，让后续的 math.random() 返回更随机的值
 ]]
 function math.newrandomseed()
-    local ok, socket = pcall(function() return require("socket") end)
+    local ok, socket =
+        pcall(
+        function()
+            return require("socket")
+        end
+    )
 
     if ok then
         -- 如果集成了 socket 模块，则使用 socket.gettime() 获取随机数种子
@@ -407,11 +438,17 @@ end
 @param number value 输入值
 @return number
 ]]
-function math.round(value) return math.floor(value + 0.5) end
+function math.round(value)
+    return math.floor(value + 0.5)
+end
 
-function math.angle2radian(angle) return angle * math.pi / 180 end
+function math.angle2radian(angle)
+    return angle * math.pi / 180
+end
 
-function math.radian2angle(radian) return radian / math.pi * 180 end
+function math.radian2angle(radian)
+    return radian / math.pi * 180
+end
 
 --[[--
 检查指定的文件或目录是否存在，如果存在返回 true，否则返回 false
@@ -466,7 +503,9 @@ function io.writefile(path, content, mode)
     mode = mode or "w+b"
     local file = io.open(path, mode)
     if file then
-        if file:write(content) == nil then return false end
+        if file:write(content) == nil then
+            return false
+        end
         io.close(file)
         return true
     else
@@ -538,7 +577,9 @@ Lua table 的 "#" 操作只对依次排序的数值下标数组有效，table.nu
 ]]
 function table.nums(t)
     local count = 0
-    for k, v in pairs(t) do count = count + 1 end
+    for k, v in pairs(t) do
+        count = count + 1
+    end
     return count
 end
 
@@ -554,7 +595,9 @@ local keys = table.keys(hashtable)
 ]]
 function table.keys(hashtable)
     local keys = {}
-    for k, v in pairs(hashtable) do keys[#keys + 1] = k end
+    for k, v in pairs(hashtable) do
+        keys[#keys + 1] = k
+    end
     return keys
 end
 
@@ -570,7 +613,9 @@ local values = table.values(hashtable)
 ]]
 function table.values(hashtable)
     local values = {}
-    for k, v in pairs(hashtable) do values[#values + 1] = v end
+    for k, v in pairs(hashtable) do
+        values[#values + 1] = v
+    end
     return values
 end
 
@@ -585,7 +630,11 @@ table.merge(dest, src)
 @param table dest 目标表格
 @param table src 来源表格
 ]]
-function table.merge(dest, src) for k, v in pairs(src) do dest[k] = v end end
+function table.merge(dest, src)
+    for k, v in pairs(src) do
+        dest[k] = v
+    end
+end
 
 --[[--
 在目标表格的指定位置插入来源表格，如果没有指定位置则连接两个表格
@@ -604,10 +653,14 @@ table.insertto(dest, src, 5)
 ]]
 function table.insertto(dest, src, begin)
     begin = checkint(begin)
-    if begin <= 0 then begin = #dest + 1 end
+    if begin <= 0 then
+        begin = #dest + 1
+    end
 
     local len = #src
-    for i = 0, len - 1 do dest[i + begin] = src[i + 1] end
+    for i = 0, len - 1 do
+        dest[i + begin] = src[i + 1]
+    end
 end
 
 --[[
@@ -622,7 +675,11 @@ print(table.indexof(array, "b")) -- 输出 2
 @return integer
 ]]
 function table.indexof(array, value, begin)
-    for i = begin or 1, #array do if array[i] == value then return i end end
+    for i = begin or 1, #array do
+        if array[i] == value then
+            return i
+        end
+    end
     return false
 end
 
@@ -637,7 +694,11 @@ print(table.keyof(hashtable, "chukong")) -- 输出 comp
 @return string 该值对应的 key
 ]]
 function table.keyof(hashtable, value)
-    for k, v in pairs(hashtable) do if v == value then return k end end
+    for k, v in pairs(hashtable) do
+        if v == value then
+            return k
+        end
+    end
     return nil
 end
 
@@ -660,7 +721,9 @@ function table.removebyvalue(array, value, removeall)
             c = c + 1
             i = i - 1
             max = max - 1
-            if not removeall then break end
+            if not removeall then
+                break
+            end
         end
         i = i + 1
     end
@@ -692,7 +755,11 @@ end
 @param table t 表格
 @param function fn 函数
 ]]
-function table.map(t, fn) for k, v in pairs(t) do t[k] = fn(v, k) end end
+function table.map(t, fn)
+    for k, v in pairs(t) do
+        t[k] = fn(v, k)
+    end
+end
 
 --[[--
 对表格中每一个值执行一次指定的函数，但不改变表格内容
@@ -711,7 +778,11 @@ end
 @param table t 表格
 @param function fn 函数
 ]]
-function table.walk(t, fn) for k, v in pairs(t) do fn(v, k) end end
+function table.walk(t, fn)
+    for k, v in pairs(t) do
+        fn(v, k)
+    end
+end
 
 --[[--
 对表格中每一个值执行一次指定的函数，如果该函数返回 false，则对应的值会从表格中删除
@@ -737,7 +808,11 @@ end
 @param function fn 函数
 ]]
 function table.filter(t, fn)
-    for k, v in pairs(t) do if not fn(v, k) then t[k] = nil end end
+    for k, v in pairs(t) do
+        if not fn(v, k) then
+            t[k] = nil
+        end
+    end
 end
 
 --[[--
@@ -770,7 +845,7 @@ end
 
 string._htmlspecialchars_set = {}
 string._htmlspecialchars_set["&"] = "&amp;"
-string._htmlspecialchars_set["\""] = "&quot;"
+string._htmlspecialchars_set['"'] = "&quot;"
 string._htmlspecialchars_set["'"] = "&#039;"
 string._htmlspecialchars_set["<"] = "&lt;"
 string._htmlspecialchars_set[">"] = "&gt;"
@@ -817,7 +892,9 @@ print(string.nl2br("Hello\nWorld"))
 @param string input 输入字符串
 @return string 转换结果
 ]]
-function string.nl2br(input) return string.gsub(input, "\n", "<br />") end
+function string.nl2br(input)
+    return string.gsub(input, "\n", "<br />")
+end
 
 --[[--
 将字符串中的特殊字符和 \n 换行符转换为 HTML 转移符和标记
@@ -854,10 +931,14 @@ local res = string.split(input, "-+-")
 function string.split(input, delimiter)
     input = tostring(input)
     delimiter = tostring(delimiter)
-    if (delimiter == '') then return false end
+    if (delimiter == "") then
+        return false
+    end
     local pos, arr = 0, {}
     -- for each divider found
-    for st, sp in function() return string.find(input, delimiter, pos, true) end do
+    for st, sp in function()
+        return string.find(input, delimiter, pos, true)
+    end do
         table.insert(arr, string.sub(input, pos, st - 1))
         pos = sp + 1
     end
@@ -881,7 +962,9 @@ print(string.ltrim(input))
 @return string 结果
 @see string.rtrim, string.trim
 ]]
-function string.ltrim(input) return string.gsub(input, "^[ \t\n\r]+", "") end
+function string.ltrim(input)
+    return string.gsub(input, "^[ \t\n\r]+", "")
+end
 
 --[[--
 去除输入字符串尾部的空白字符，返回结果
@@ -894,7 +977,9 @@ print(string.ltrim(input))
 @return string 结果
 @see string.ltrim, string.trim
 ]]
-function string.rtrim(input) return string.gsub(input, "[ \t\n\r]+$", "") end
+function string.rtrim(input)
+    return string.gsub(input, "[ \t\n\r]+$", "")
+end
 
 --[[--
 去掉字符串首尾的空白字符，返回结果
@@ -960,8 +1045,14 @@ print(string.urldecode(input))
 ]]
 function string.urldecode(input)
     input = string.gsub(input, "+", " ")
-    input = string.gsub(input, "%%(%x%x)",
-                        function(h) return string.char(checknumber(h, 16)) end)
+    input =
+        string.gsub(
+        input,
+        "%%(%x%x)",
+        function(h)
+            return string.char(checknumber(h, 16))
+        end
+    )
     input = string.gsub(input, "\r\n", "\n")
     return input
 end
@@ -1009,8 +1100,10 @@ function string.formatnumberthousands(num)
     local formatted = tostring(checknumber(num))
     local k
     while true do
-        formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
-        if k == 0 then break end
+        formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", "%1,%2")
+        if k == 0 then
+            break
+        end
     end
     return formatted
 end
