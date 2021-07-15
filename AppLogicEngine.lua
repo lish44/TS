@@ -16,7 +16,7 @@ local list = {
     [6] = c6
 }
 link = {}
-PageLogic = {
+local PageLogic = {
     {id = 1, link = {5, 2, 6}},
     {id = 2, link = 5},
     {id = 3, link = 2},
@@ -43,7 +43,8 @@ function ale:Go(list, page)
 
         if feature_name then
             pre_item = item
-            print("DO " .. feature_name)
+            -- print("DO " .. feature_name)
+            Engine(feature_name, nil, nil, 60)
             idx = 1
         end
 
@@ -95,4 +96,4 @@ function ale:FindTab(list, _id)
     return nil
 end
 
-ale:Go(list, PageLogic)
+-- ale:Go(list, PageLogic)

@@ -2,5 +2,8 @@
     "Lua.diagnostics.disable": [
         "lowercase-global"
     ],
-    "Lua.runtime.unicodeName": true
+    "Lua.runtime.unicodeName": true,
+    "Lua.diagnostics.globals": [
+        "nLog"
+    ]
 }
