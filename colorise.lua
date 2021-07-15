@@ -45,7 +45,7 @@ return c
 
 --[[ex:
 
-	local color = require "colorise"
+	local color = require "Colorise"
 
     nLog(color.hex2rgb("D2527F")) -- or '#D2527F'
    

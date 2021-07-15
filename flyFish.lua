@@ -1,5 +1,6 @@
 ---@diagnostic disable: undefined-global
 require("TSLib")
+
 Down = 0
 Left = 2
 Right = 1
@@ -201,7 +202,7 @@ function MulitOptfFc(tab, pointFound)
         if DoOptFc(v, pointFound) == Exit then
             return Exit
         end
-        mSleep(100)
+        mSleep(200)
     end
 end
 
@@ -224,7 +225,7 @@ function Engine(jobs, fcNotFound, second, time)
             if findmulcolorsOne(v.FeatureExclude) > 0 then
                 nLog("「排除特征-跳过动作」" .. "-- " .. k)
             else
-                local x, y = findmulcolorsAll(v.Find)
+                local x, y = ac:FindColorOpt(v.Find[1], v.Find[2])
                 if (jobState == 0 or jobState == curState) and x > 0 then
                     nLog("「当前状态」" .. "-- " .. curState)
                     featureNotFound = false
@@ -236,7 +237,7 @@ function Engine(jobs, fcNotFound, second, time)
                                 v.Frequency[1] = os.time()
                                 if MulitOptfFc(v.DoOpt, {x, y}) == Exit then
                                     nLog("「退出」" .. "-- " .. k)
-                                    return
+                                    return false
                                 end
                             else
                                 nLog(
@@ -248,7 +249,7 @@ function Engine(jobs, fcNotFound, second, time)
                     elseif v.DoOpt then
                         if MulitOptfFc(v.DoOpt, {x, y}) == Exit then
                             nLog("「退出」" .. "-- " .. k)
-                            return
+                            return false
                         end
                     end
                     if v.Sleep then
@@ -263,7 +264,7 @@ function Engine(jobs, fcNotFound, second, time)
                     if v.Exit then
                         nLog("「结束任务」" .. "-- " .. k)
                         mSleep(10)
-                        return
+                        return true
                     end
                 end
             end
@@ -275,7 +276,7 @@ function Engine(jobs, fcNotFound, second, time)
             if fcNotFound then
                 if fcNotFound(timeDif) == Exit then
                     nLog("「退出-所有特征找不到」")
-                    return
+                    return false
                 end
             end
             if timeDif > 5 then

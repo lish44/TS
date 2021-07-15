@@ -8,7 +8,7 @@ c3 = false
 c5 = "c5"
 c6 = "c6"
 
-list = {
+local list = {
     [1] = c1,
     [2] = c2,
     [3] = c3,
@@ -17,7 +17,7 @@ list = {
 }
 link = {}
 PageLogic = {
-    {id = 1, link = {3, 2, 6}},
+    {id = 1, link = {5, 2, 6}},
     {id = 2, link = 5},
     {id = 3, link = 2},
     {id = 5, link = {3, 6}},
@@ -46,6 +46,7 @@ function ale:Go(list, page)
             print("DO " .. feature_name)
             idx = 1
         end
+
         if item.link == nil then
             return
         end

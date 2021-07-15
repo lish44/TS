@@ -46,3 +46,15 @@ function ac:FindColorOpt(data, enum)
 
     return x, y
 end
+
+-- ...格式必须是{x1,y1,x2,y2}
+function ac:AreaHit(...)
+    return ...
+end
+
+-- 格式必须是{x1,y1,x2,y2}
+function ac:Slider(p)
+    return {{p[1], p[2]}, {p[3], p[4]}}
+end
+function ac:MuColorOpt()
+end

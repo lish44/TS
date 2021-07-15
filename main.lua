@@ -1,8 +1,21 @@
 require("Lib")
-require("huahua")
+
 function ce(tb)
    return {{tb[1],tb[2]},{tb[3],tb[4]}} 
 end
+
+MainPage = {
+    SubPage = {
+        Find = {t.s.Name,Enum.FMCIRF}, -- 找特征
+        DoOpt = {ac:AreaHit(t.p.Name)},-- 操作
+        Sleep = 1000,-- 睡眠
+        State = 0,--当前mainpage的状态
+        ChangeState = 0,
+        Frequency = {1000,3000}, -- 随机睡眠
+        FeatureExclude = nil, -- 排除特征
+        Exit
+    }
+}
 
 t = {
     sytle = {
@@ -19,7 +32,7 @@ t.point.ceshi = {70,591,23,45}
 主界面 = {
 
     测试 = {
-        Find = t.sytle.ceshi;
+        Find = {t.sytle.ceshi,Enum.FMCIRF};
         DoOpt = {ce(t.point.ceshi),1000,{23,45}};
         Sleep = 2000;
     };
@@ -29,3 +42,5 @@ InitDeviceDirection(Down);
 Engine(主界面,nil,nil,10);
 
 
+-- 1768 136.3 
+-- 1056 181
